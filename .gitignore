@@ -1,0 +1,5 @@
+backend/node_modules/.bin/mime.cmd
+backend/node_modules/.bin/mime
+backend/node_modules/
+node_modules/.bin/
+node_modules/
