@@ -4,6 +4,7 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Data = require('./data');
+const Tag = require('./tag');
 
 const API_PORT = 3001;
 const app = express();
@@ -34,6 +35,13 @@ app.use(logger('dev'));
 // this method fetches all available data in our database
 router.get('/getData', (req, res) => {
   Data.find((err, data) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+
+router.get('/getTagData', (req, res) => {
+  Tag.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
@@ -73,6 +81,26 @@ router.post('/putData', (req, res) => {
     });
   }
   data.message = message;
+  data.id = id;
+  data.save((err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.post('/putTagData', (req, res) => {
+  let data = new Tag();
+
+  const { id, tag } = req.body;
+
+  // if ((!id && id !== 0) || !tag) {
+  //   console.log("dfasdfasdfasdf");
+  //   return res.json({
+  //     success: false,
+  //     error: 'INVALID INPUTS',
+  //   });
+  // }
+  data.tag = tag;
   data.id = id;
   data.save((err) => {
     if (err) return res.json({ success: false, error: err });

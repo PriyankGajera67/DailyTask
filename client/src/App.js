@@ -1,7 +1,10 @@
 // /client/App.js
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import Nav from './components/Nav';
+import Container from './components/Container';
 class App extends Component {
   // initialize our state
   state = {
@@ -20,7 +23,7 @@ class App extends Component {
   componentDidMount() {
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
+      let interval = setInterval(this.getDataFromDb, 100000);
       this.setState({ intervalIsSet: interval });
     }
   }
@@ -103,18 +106,10 @@ class App extends Component {
   render() {
     const { data } = this.state;
     return (
+     
       <div>
-        <ul>
-          {data.length <= 0
-            ? 'NO DB ENTRIES YET'
-            : data.map((dat) => (
-                <li style={{ padding: '10px' }} key={data.message}>
-                  <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
-                  <span style={{ color: 'gray' }}> data: </span>
-                  {dat.message}
-                </li>
-              ))}
-        </ul>
+        <Nav />
+        <Container data={data} />
         <div style={{ padding: '10px' }}>
           <input
             type="text"
