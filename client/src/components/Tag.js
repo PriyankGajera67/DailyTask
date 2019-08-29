@@ -6,6 +6,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
 import axios from 'axios';
 
 
@@ -22,6 +25,12 @@ const useStyles = makeStyles(theme => ({
   },
   chip: {
     margin: theme.spacing(1),
+  },
+  paper: {
+    padding: theme.spacing(5),
+    margin: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -52,7 +61,7 @@ export default class Tag extends React.Component {
   };
 
   handleDelete = () => {
-   // alert('You clicked the delete icon.');
+    // alert('You clicked the delete icon.');
   }
 
   handleClick = () => {
@@ -63,11 +72,11 @@ export default class Tag extends React.Component {
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
   componentDidMount() {
-      this.getDataFromDb();
-      if (!this.state.intervalIsSet) {
+    this.getDataFromDb();
+    if (!this.state.intervalIsSet) {
       let interval = setInterval(this.getDataFromDb, 1000);
       this.setState({ intervalIsSet: interval });
-      }
+    }
   }
 
   // never let a process live forever
@@ -92,6 +101,25 @@ export default class Tag extends React.Component {
       .then((res) => this.setState({ data: res.data }));
   };
 
+
+  // our delete method that uses our backend api
+  // to remove existing database information
+  deleteFromDB = (idTodelete) => {
+    parseInt(idTodelete);
+    let objIdToDelete = null;
+    this.state.data.forEach((dat) => {
+      if (dat.id == idTodelete) {
+        objIdToDelete = dat._id;
+      }
+    });
+
+    axios.delete('http://localhost:3001/api/deleteTag', {
+      data: {
+        id: objIdToDelete,
+      },
+    });
+  };
+
   // our put method that uses our backend api
   // to create new query into our data base
   putTagDataToDB = (tag) => {
@@ -111,42 +139,53 @@ export default class Tag extends React.Component {
     const { data } = this.state;
     return (
       <div>
-        <div>
-          
-      {data.length <= 0
 
-        ? 'NO!! Tags Added'
+        <Container fixed>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
 
-        : data.map((dat) => (
-            <Chip key={data.tag}
-            avatar={
-              <Avatar>
-                <FaceIcon />
-              </Avatar>
-            }
-            label={dat.tag}
-            onClick={this.handleClick()}
-            onDelete={this.handleDelete()}
-            className={useStyles.chip}
+            <Paper className={useStyles.paper}>
+              {data.length <= 0
+
+                ? 'NO!! Tags Added'
+
+                : data.map((dat) => (
+                  <Chip key={data.tag}
+                    avatar={
+                      <Avatar>
+                        <FaceIcon />
+                      </Avatar>
+                    }
+                    label={dat.tag}
+                    onDelete={this.handleDelete(this.deleteFromDB(dat.id))}
+                    className={useStyles.chip}
+                  />
+
+                ))}
+            </Paper>
+
+          </Grid>
+        </Grid>
+        <br></br>
+          <form className={useStyles.root} noValidate>
+            <ValidationTextField
+              className={useStyles.margin}
+              label="Tag"
+              required
+              variant="outlined"
+              defaultValue=""
+              fullWidth
+              id="validation-outlined-input"
+              onChange={(e) => this.setState({ tag: e.target.value })}
             />
-
-          ))}
-        </div>
-        <form className={useStyles.root} noValidate>
-          <ValidationTextField
-            className={useStyles.margin}
-            label="Tag"
-            required
-            variant="outlined"
-            defaultValue=""
-            id="validation-outlined-input"
-            onChange={(e) => this.setState({ tag: e.target.value })}
-          />
-          <br />
-          <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.tag)} className={useStyles.button}>
-            Add Tag
-                        </Button>
-        </form>
+            <br />
+            <br />
+            <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.tag)} className={useStyles.button}>
+              Add Tag
+                          </Button>
+          </form>
+        </Container>
+     
       </div>
     );
   }

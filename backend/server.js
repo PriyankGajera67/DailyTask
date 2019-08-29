@@ -67,6 +67,16 @@ router.delete('/deleteData', (req, res) => {
   });
 });
 
+// this is our delete method
+// this method removes existing data in our database
+router.delete('/deleteTag', (req, res) => {
+  const { id } = req.body;
+  Tag.findByIdAndRemove(id, (err) => {
+    if (err) return res.send(err);
+    return res.json({ success: true });
+  });
+});
+
 // this is our create methid
 // this method adds new data in our database
 router.post('/putData', (req, res) => {
