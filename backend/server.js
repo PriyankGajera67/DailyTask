@@ -13,7 +13,7 @@ const router = express.Router();
 
 // this is our MongoDB database
 const dbRoute =
-  'mongodb+srv://Priyank:test@dailytask0-teimo.mongodb.net/test?retryWrites=true&w=majority';
+  'mongodb://127.0.0.1:27017/dailyTask';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true });
@@ -93,13 +93,13 @@ router.post('/putTagData', (req, res) => {
 
   const { id, tag } = req.body;
 
-  // if ((!id && id !== 0) || !tag) {
-  //   console.log("dfasdfasdfasdf");
-  //   return res.json({
-  //     success: false,
-  //     error: 'INVALID INPUTS',
-  //   });
-  // }
+  if ((!id && id !== 0) || !tag) {
+    console.log("dfasdfasdfasdf");
+    return res.json({
+      success: false,
+      error: 'INVALID INPUTS',
+    });
+  }
   data.tag = tag;
   data.id = id;
   data.save((err) => {
