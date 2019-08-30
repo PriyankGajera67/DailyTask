@@ -6,6 +6,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
+import LabelIcon from '@material-ui/icons/Label';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -25,9 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
   chip: {
     margin: theme.spacing(1),
+    padding: '0 30px',
   },
   paper: {
-    padding: theme.spacing(5),
+    padding: '30px 30px',
     margin: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.secondary,
@@ -150,14 +152,9 @@ export default class Tag extends React.Component {
                 ? 'NO!! Tags Added'
 
                 : data.map((dat) => (
-                  <Chip key={data.tag}
-                    avatar={
-                      <Avatar>
-                        <FaceIcon />
-                      </Avatar>
-                    }
+                  <Chip key={dat.tag}
                     label={dat.tag}
-                    onDelete={this.handleDelete(this.deleteFromDB(dat.id))}
+                    color="primary"
                     className={useStyles.chip}
                   />
 
