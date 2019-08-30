@@ -10,11 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
-
-const suggestions = [].map(suggestion => ({
-  value: suggestion.label,
-  label: suggestion.label,
-}));
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,26 +63,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
- // when component mounts, first thing it does is fetch all existing data in our db
-  // then we incorporate a polling logic so that we can easily see if our db has
-  // changed and implement those changes into our UI
-  componentDidMount() {
-    this.getDataFromDb();
-    if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
-      this.setState({ intervalIsSet: interval });
-    }
-  }
-
-  // never let a process live forever
-  // always kill a process everytime we are done using it
-  componentWillUnmount() {
-    if (this.state.intervalIsSet) {
-      clearInterval(this.state.intervalIsSet);
-      this.setState({ intervalIsSet: null });
-    }
-  }
-  
 function NoOptionsMessage(props) {
   return (
     <Typography
@@ -98,12 +74,6 @@ function NoOptionsMessage(props) {
     </Typography>
   );
 }
-
-getDataFromDb = () => {
-    fetch('http://localhost:3001/api/getTagData')
-      .then((data) => data.json())
-      .then((res) => this.setState({ data: res.data }));
-  };
 
 NoOptionsMessage.propTypes = {
   /**
@@ -342,6 +312,47 @@ export default function TagAutoCompleteField() {
   const theme = useTheme();
   const [single, setSingle] = React.useState(null);
   const [multi, setMulti] = React.useState(null);
+
+  const suggestions = [];
+  
+
+   // when component mounts, first thing it does is fetch all existing data in our db
+  // then we incorporate a polling logic so that we can easily see if our db has
+  // changed and implement those changes into our UI
+  function componentDidMount() {
+    getDataFromDb();
+    if (!this.state.intervalIsSet) {
+      let interval = setInterval(this.getDataFromDb, 1000);
+      this.setState({ intervalIsSet: interval });
+    }
+  }
+
+  // never let a process live forever
+  // always kill a process everytime we are done using it
+  function componentWillUnmount() {
+    if (this.state.intervalIsSet) {
+      clearInterval(this.state.intervalIsSet);
+      this.setState({ intervalIsSet: null });
+    }
+  }
+
+  function setSuggestions(data){
+      debugger;
+      console.log("I am here");
+    suggestions = data;
+    suggestions.map(suggestion => ({
+        value: suggestion.tag,
+        label: suggestion.tag,
+      }));
+    }
+  
+function getDataFromDb() {
+    fetch('http://localhost:3001/api/getTagData')
+      .then((data) => data.json())
+      .then((res) => setSuggestions(res.data));
+  };
+
+  
 
   function handleChangeSingle(value) {
     setSingle(value);
