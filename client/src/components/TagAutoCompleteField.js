@@ -329,7 +329,7 @@ const components = {
   ValueContainer,
 };
 
-export default function TagAutoCompleteField() {
+export default function TagAutoCompleteField(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [single, setSingle] = React.useState(null);
@@ -340,7 +340,9 @@ export default function TagAutoCompleteField() {
   }
 
   function handleChangeMulti(value) {
+    console.log("dfasdfasd")
     setMulti(value);
+    props.parentCallback(value);
   }
 
   const selectStyles = {
