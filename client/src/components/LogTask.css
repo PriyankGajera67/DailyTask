@@ -1,0 +1,10 @@
+.task{
+    border:1px solid #f2f2f2;
+    margin-bottom:10px;
+    padding: 0px 10px 10px 10px;
+}
+
+.tag-chips{
+    display: inline-block;
+    margin-bottom: 10px; 
+}

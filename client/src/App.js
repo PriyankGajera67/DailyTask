@@ -1,7 +1,6 @@
 // /client/App.js
 import React, { Component } from 'react';
 import Nav from './components/Nav';
-import Container from './components/Container';
 import { fade,makeStyles } from '@material-ui/core/styles';
 import Tag from './components/Tag';
 import LogTask from './components/LogTask';
@@ -10,8 +9,9 @@ import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { ThemeProvider } from '@material-ui/styles';
+import Chart from 'react-apexcharts';
+import Container from '@material-ui/core/Container';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,10 +32,79 @@ class App extends Component {
     LogTask = () =>{
       return <LogTask />;
     }
+
+    constructor(props) {
+      super(props);
+  
+      this.state = {
+        options: {
+          chart: {
+            id: 'apexchart-example'
+          },
+          xaxis: {
+            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          }
+        },
+        series: [{
+          name: 'series-1',
+          data: []
+        }],
+        intervalIsSet: false,
+        objectToUpdate: null,
+        data:[]
+      }
+    }
+
+
+      // when component mounts, first thing it does is fetch all existing data in our db
+  // then we incorporate a polling logic so that we can easily see if our db has
+  // changed and implement those changes into our UI
+  componentDidMount() {
+    this.getDataFromDb();
+    this.setData();
+    if (!this.state.intervalIsSet) {
+      let interval = setInterval(this.getDataFromDb, 100000);
+      this.setState({ intervalIsSet: interval });
+    }
+  }
+
+  // never let a process live forever
+  // always kill a process everytime we are done using it
+  componentWillUnmount() {
+    if (this.state.intervalIsSet) {
+      clearInterval(this.state.intervalIsSet);
+      this.setState({ intervalIsSet: null });
+    }
+  }
+
+  // just a note, here, in the front end, we use the id key of our data object
+  // in order to identify which we want to Update or delete.
+  // for our back end, we use the object id assigned by MongoDB to modify
+  // data base entries
+
+  // our first get method that uses our backend api to
+  // fetch data from our data base
+  getDataFromDb = () => {
+    fetch('http://localhost:3001/api/getTagData')
+      .then((data) => data.json())
+      .then((res) => this.setState({ data: res.data }));
+      this.setData();
+  };
+
+  setData(){
+    let tempTag = [];
+    this.state.data.map(e =>tempTag.push(e.tag));
+
+    //this.setState({series: {data: tempTag}})
+
+  }
+
+
   // here is our UI
   // it is easy to understand their functions when you
   // see them render into our screen
   render() {
+
     return (
      
       <div>
@@ -62,7 +131,9 @@ class App extends Component {
           <Route path="/logTask" component={LogTask} />
         </div>
       </Router>
-
+      <Container maxWidth="sm">
+          <Chart options={this.state.options} series={this.state.series} type="line" width={600} />
+      </Container>
 
     
 

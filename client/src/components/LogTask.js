@@ -4,13 +4,10 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import TagAutoCompleteField from './TagAutoCompleteField';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
+import './LogTask.css';
 import axios from 'axios';
 
 
@@ -166,17 +163,17 @@ export default class LogTask extends React.Component {
                 ? 'NO!! Task Added till now'
 
                 : data.map((dat) => (
-                    <div style={{border: 1,borderColor:'#f2f2f2'}}>
-                        <h5>{dat.taskName}</h5>
-                        <p>{dat.updatedAt}</p>
+                    <div className="task">
+                        <h4>{dat.taskName}</h4>
+                        <p>{ dat.updatedAt }</p>
                         {dat.tag.length <= 0 ? 'No Tag': dat.tag.map((t) => (
-                             <span style={{margin:2}}>
+                             <div class="tag-chips" style={{margin:2}}>
                                  <Chip key={t}
                                 label={t}
                                 color="primary"
                                 className={useStyles.chip}
                             />
-                             </span>
+                             </div>
                         ))}
                         </div>
 
