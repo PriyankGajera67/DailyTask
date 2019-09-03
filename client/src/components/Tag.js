@@ -7,6 +7,7 @@ import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
+import './LogTask.css';
 import axios from 'axios';
 
 
@@ -149,11 +150,14 @@ export default class Tag extends React.Component {
                 ? 'NO!! Tags Added'
 
                 : data.map((dat) => (
-                  <Chip key={dat.tag}
+                  <div className="tag-chips" style={{margin:2}}>
+                                      <Chip key={dat.tag}
                     label={dat.tag}
                     color="primary"
                     className={useStyles.chip}
                   />
+                  </div>
+
 
                 ))}
             </Paper>
