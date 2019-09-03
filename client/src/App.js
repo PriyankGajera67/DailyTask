@@ -1,16 +1,20 @@
 // /client/App.js
 import React, { Component } from 'react';
 import Nav from './components/Nav';
-import { fade,makeStyles } from '@material-ui/core/styles';
+import { fade, makeStyles } from '@material-ui/core/styles';
 import Tag from './components/Tag';
 import LogTask from './components/LogTask';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import Chart from 'react-apexcharts';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
 
 const useStyles = makeStyles(theme => ({
@@ -18,45 +22,45 @@ const useStyles = makeStyles(theme => ({
     width: 500,
   },
 
-  secondNav:{
+  secondNav: {
     backgroundColor: fade(theme.palette.common.primary, 0.15),
   }
 }));
 
 
 class App extends Component {
-    Tag = () => {
-      return <Tag />;
-    }
+  Tag = () => {
+    return <Tag />;
+  }
 
-    LogTask = () =>{
-      return <LogTask />;
-    }
+  LogTask = () => {
+    return <LogTask />;
+  }
 
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        options: {
-          chart: {
-            id: 'apexchart-example'
-          },
-          xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-          }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      options: {
+        chart: {
+          id: 'apexchart-example'
         },
-        series: [{
-          name: 'series-1',
-          data: []
-        }],
-        intervalIsSet: false,
-        objectToUpdate: null,
-        data:[]
-      }
+        xaxis: {
+          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        }
+      },
+      series: [{
+        name: 'series-1',
+        data: []
+      }],
+      intervalIsSet: false,
+      objectToUpdate: null,
+      data: []
     }
+  }
 
 
-      // when component mounts, first thing it does is fetch all existing data in our db
+  // when component mounts, first thing it does is fetch all existing data in our db
   // then we incorporate a polling logic so that we can easily see if our db has
   // changed and implement those changes into our UI
   componentDidMount() {
@@ -88,12 +92,12 @@ class App extends Component {
     fetch('http://localhost:3001/api/getTagData')
       .then((data) => data.json())
       .then((res) => this.setState({ data: res.data }));
-      this.setData();
+    this.setData();
   };
 
-  setData(){
+  setData() {
     let tempTag = [];
-    this.state.data.map(e =>tempTag.push(e.tag));
+    this.state.data.map(e => tempTag.push(e.tag));
 
     //this.setState({series: {data: tempTag}})
 
@@ -106,36 +110,48 @@ class App extends Component {
   render() {
 
     return (
-     
+
       <div>
         <Nav />
-      <Router>
+        <br />
+        <Router>
+        <Grid container spacing={3}>
+        <Grid item xs={2}>
         <div>
-        <BottomNavigation
-          showLabels
-          className={useStyles.secondNav}>
-        
-          <Link to="/tags/">
-            <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-          </Link>
+            <List component="nav" aria-label="main mailbox folders">
+              <Link to="/tags/">
+                <ListItem button>
+                  <ListItemIcon>
+                    <LoyaltyIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Tags" />
+                </ListItem>
+              </Link>
+              <Link to="/logTask/">
+                <ListItem button>
+                  <ListItemIcon>
+                    <AddBoxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Add Log" />
+                </ListItem>          </Link>
 
-          <Link to="/logTask/">
-            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          </Link>
-      </BottomNavigation>
-          <nav>
+
+            </List>
+            <Divider />
+          </div>
+        </Grid>
+        <Grid item xs={10}>
+            <Route path="/tags" component={Tag} />
+            <Route path="/logTask" component={LogTask} />
+        </Grid>
+      </Grid>
           
-          </nav>
-
-          <Route path="/tags" component={Tag} />
-          <Route path="/logTask" component={LogTask} />
-        </div>
-      </Router>
-      <Container maxWidth="sm">
+        </Router>
+        <Container maxWidth="sm">
           <Chart options={this.state.options} series={this.state.series} type="line" width={600} />
-      </Container>
+        </Container>
 
-    
+
 
       </div>
     );
