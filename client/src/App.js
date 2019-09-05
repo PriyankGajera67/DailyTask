@@ -147,9 +147,9 @@ class App extends Component {
       </Grid>
           
         </Router>
-        <Container maxWidth="sm">
+        {/* <Container maxWidth="sm">
           <Chart options={this.state.options} series={this.state.series} type="line" width={600} />
-        </Container>
+        </Container> */}
 
 
 

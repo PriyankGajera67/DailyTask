@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
+import TimelineIcon from '@material-ui/icons/Timeline';
 import Container from '@material-ui/core/Container';
 import TagAutoCompleteField from './TagAutoCompleteField';
 import MaterialUIPickers from './MaterialUIPickers';
@@ -181,11 +182,25 @@ export default class LogTask extends React.Component {
                     <div className="task">
                       <h4>{dat.taskName}</h4>
 
-                      <p>  {new Intl.DateTimeFormat('en-GB', {
+                      {/* <p>  {new Intl.DateTimeFormat('en-GB', {
                         month: 'long',
                         day: '2-digit',
                         year: 'numeric',
                       }).format(new Date(dat.updatedAt))}
+                      </p> */}
+                      <p>
+                      <TimelineIcon />&nbsp; &nbsp;
+                      <span class="time-range">
+                      {new Intl.DateTimeFormat('en-GB', {
+                         hour: 'numeric',
+                         minute: 'numeric',
+                         hour12: true,
+                      }).format(new Date(dat.startDate))} - {new Intl.DateTimeFormat('en-GB', {
+                         hour: 'numeric',
+                         minute: 'numeric',
+                         hour12: true,
+                      }).format(new Date(dat.endDate))}
+                      </span>
                       </p>
                       {/* <p>{ dat.updatedAt }</p> */}
                       {dat.tag.length <= 0 ? 'No Tag' : dat.tag.map((t) => (
