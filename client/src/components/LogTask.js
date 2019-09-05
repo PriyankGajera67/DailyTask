@@ -6,6 +6,7 @@ import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import TagAutoCompleteField from './TagAutoCompleteField';
+import MaterialUIPickers from './MaterialUIPickers';
 import List from '@material-ui/core/List';
 import './LogTask.css';
 import axios from 'axios';
@@ -16,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexWrap: 'wrap',
   },
-  list:{
+  list: {
     width: '100%',
     maxWidth: 360,
     backgroundColor: theme.palette.background.primary,
@@ -60,19 +61,33 @@ export default class LogTask extends React.Component {
   state = {
     data: [],
     id: 0,
-    taskName:null,
+    taskName: null,
     tag: [],
     intervalIsSet: false,
     objectToUpdate: null,
   };
 
 
-    callbackFunction = (childData) => {
-        console.log("in parent");
-        const tagList = [];
-        childData.map(e => tagList.push(e.label));
-        this.setState({tag: tagList})
-    }
+  callbackFunction = (childData) => {
+    console.log("in parent");
+    const tagList = [];
+    childData.map(e => tagList.push(e.label));
+    this.setState({ tag: tagList })
+  }
+
+  callbackStartDateFunction = (data) => {
+    console.log("in Startdate",data);
+    // const tagList = [];
+    // childData.map(e => tagList.push(e.label));
+    // this.setState({ tag: tagList })
+  }
+
+  callbackEndDateFunction = (data) => {
+    console.log("in Enddate",data);
+    // const tagList = [];
+    // childData.map(e => tagList.push(e.label));
+    // this.setState({ tag: tagList })
+  }
 
   // when component mounts, first thing it does is fetch all existing data in our db
   // then we incorporate a polling logic so that we can easily see if our db has
@@ -128,7 +143,7 @@ export default class LogTask extends React.Component {
 
   // our put method that uses our backend api
   // to create new query into our data base
-  putTagDataToDB = (taskName,tag) => {
+  putTagDataToDB = (taskName, tag) => {
     let currentIds = this.state.data.map((data) => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -137,15 +152,15 @@ export default class LogTask extends React.Component {
 
     axios.post('http://localhost:3001/api/putTaskData', {
       id: idToBeAdded,
-      taskName:taskName,
+      taskName: taskName,
       tag: tag,
     });
   };
 
 
- onGreet(){
-     alert('hello');
- }
+  onGreet() {
+    alert('hello');
+  }
 
   render() {
     const { data } = this.state;
@@ -153,63 +168,71 @@ export default class LogTask extends React.Component {
       <div>
 
         <Container fixed>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-          <List component="nav" className={useStyles.list} aria-label="mailbox folders">
-            
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <List component="nav" className={useStyles.list} aria-label="mailbox folders">
 
-              {data.length <= 0
 
-                ? 'NO!! Task Added till now'
+                {data.length <= 0
 
-                : data.map((dat) => (
+                  ? 'NO!! Task Added till now'
+
+                  : data.map((dat) => (
                     <div className="task">
-                        <h4>{dat.taskName}</h4>
-                        <p>{ dat.updatedAt }</p>
-                        {dat.tag.length <= 0 ? 'No Tag': dat.tag.map((t) => (
-                             <div class="tag-chips" style={{margin:2}}>
-                                 <Chip key={t}
-                                label={t}
-                                color="primary"
-                                className={useStyles.chip}
-                            />
-                             </div>
-                        ))}
+                      <h4>{dat.taskName}</h4>
+
+                      <p>  {new Intl.DateTimeFormat('en-GB', {
+                        month: 'long',
+                        day: '2-digit',
+                        year: 'numeric',
+                      }).format(new Date(dat.updatedAt))}
+                      </p>
+                      {/* <p>{ dat.updatedAt }</p> */}
+                      {dat.tag.length <= 0 ? 'No Tag' : dat.tag.map((t) => (
+                        <div class="tag-chips" style={{ margin: 2 }}>
+                          <Chip key={t}
+                            label={t}
+                            color="primary"
+                            className={useStyles.chip}
+                          />
                         </div>
+                      ))}
+                    </div>
 
-                ))}
-            </List>
-            
+                  ))}
+              </List>
 
-          </Grid>
-          <Grid item xs={6}>
-
-          <form className={useStyles.root} noValidate>
-            <ValidationTextField
-              className={useStyles.margin}
-              label="Task Name"
-              required
-              variant="outlined"
-              defaultValue=""
-              fullWidth
-              id="validation-outlined-input"
-              onChange={(e) => this.setState({ taskName: e.target.value })}
-            />
-            <br />
-            <br />
-            <TagAutoCompleteField parentCallback = {this.callbackFunction}/>
-            
-            <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.taskName,this.state.tag)} className={useStyles.button}>
-              Add Task
-                          </Button>
-          </form>
 
             </Grid>
-        </Grid>
-        <br></br>
-         
+            <Grid item xs={6}>
+
+              <form className={useStyles.root} noValidate>
+                <ValidationTextField
+                  className={useStyles.margin}
+                  label="Task Name"
+                  required
+                  variant="outlined"
+                  defaultValue=""
+                  fullWidth
+                  id="validation-outlined-input"
+                  onChange={(e) => this.setState({ taskName: e.target.value })}
+                />
+                <br />
+                <br />
+                <TagAutoCompleteField parentCallback={this.callbackFunction} />
+                <MaterialUIPickers parentStartDateCallback={this.callbackStartDateFunction}  parentEndDateCallback={this.callbackEndDateFunction}/>
+
+                <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.taskName, this.state.tag)} className={useStyles.button}>
+                  Add Task
+                          </Button>
+              </form>
+
+            </Grid>
+          </Grid>
+          <br></br>
+
         </Container>
-     
+
       </div>
     );
   }
