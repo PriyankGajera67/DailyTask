@@ -142,9 +142,9 @@ export default class Tag extends React.Component {
 
         <Container fixed>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-
-            <Paper className={useStyles.paper}>
+          <Grid item xs={6}>
+            <h2>Available Tags</h2>
+            {/* <Paper className={useStyles.paper}> */}
               {data.length <= 0
 
                 ? 'NO!! Tags Added'
@@ -160,11 +160,12 @@ export default class Tag extends React.Component {
 
 
                 ))}
-            </Paper>
+            {/* </Paper> */}
 
           </Grid>
-        </Grid>
-        <br></br>
+
+          <Grid item xs={6}>
+          <h2>Add New Tag</h2>
           <form className={useStyles.root} noValidate>
             <ValidationTextField
               className={useStyles.margin}
@@ -182,6 +183,10 @@ export default class Tag extends React.Component {
               Add Tag
                           </Button>
           </form>
+          </Grid>
+        </Grid>
+        <br></br>
+         
         </Container>
      
       </div>
