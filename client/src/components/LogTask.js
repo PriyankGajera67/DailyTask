@@ -219,8 +219,8 @@ export default class LogTask extends React.Component {
                 />
                 <br />
                 <br />
-                <TagAutoCompleteField parentCallback={this.callbackFunction} />
                 <MaterialUIPickers parentStartDateCallback={this.callbackStartDateFunction}  parentEndDateCallback={this.callbackEndDateFunction}/>
+                <TagAutoCompleteField parentCallback={this.callbackFunction} />
 
                 <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.taskName, this.state.tag,this.state.startDate,this.state.endDate)} className={useStyles.button}>
                   Add Task

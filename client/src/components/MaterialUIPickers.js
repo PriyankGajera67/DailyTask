@@ -27,9 +27,9 @@ export default function MaterialUIPickers(props) {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container justify="space-around">
+      <Grid container>
         <KeyboardTimePicker
-          margin="normal"
+          margin="0"
           id="start-time"
           label="Start Time"
           value={selectedStartDate}
@@ -38,9 +38,9 @@ export default function MaterialUIPickers(props) {
             'aria-label': 'start time',
           }}
         />
-
+        &nbsp; &nbsp; &nbsp;
         <KeyboardTimePicker
-          margin="normal"
+          margin="0"
           id="end-time"
           label="End Time"
           value={selectedEndDate}

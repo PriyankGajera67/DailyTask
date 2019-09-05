@@ -37,7 +37,7 @@ const suggestions = [
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    height: 250,
+    height: 100,
     minWidth: 290,
   },
   input: {
