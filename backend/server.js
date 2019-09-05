@@ -137,9 +137,9 @@ router.post('/putTagData', (req, res) => {
 router.post('/putTaskData', (req, res) => {
   let data = new Task();
 
-  const { id, taskName, tag } = req.body;
+  const { id, taskName, tag, startDate, endDate } = req.body;
 
-  if ((!id && id !== 0) || !taskName || !tag) {
+  if ((!id && id !== 0) || !taskName || !tag || !startDate || !endDate) {
     console.log("dfasdfasdfasdf");
     return res.json({
       success: false,
@@ -148,6 +148,8 @@ router.post('/putTaskData', (req, res) => {
   }
   data.taskName = taskName
   data.tag = tag;
+  data.startDate = startDate;
+  data.endDate = endDate;
   data.id = id;
   data.save((err) => {
     if (err) return res.json({ success: false, error: err });

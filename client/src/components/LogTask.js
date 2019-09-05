@@ -63,6 +63,8 @@ export default class LogTask extends React.Component {
     id: 0,
     taskName: null,
     tag: [],
+    startDate:null,
+    endDate:null,
     intervalIsSet: false,
     objectToUpdate: null,
   };
@@ -77,16 +79,12 @@ export default class LogTask extends React.Component {
 
   callbackStartDateFunction = (data) => {
     console.log("in Startdate",data);
-    // const tagList = [];
-    // childData.map(e => tagList.push(e.label));
-    // this.setState({ tag: tagList })
+    this.setState({ startDate: data });
   }
 
   callbackEndDateFunction = (data) => {
     console.log("in Enddate",data);
-    // const tagList = [];
-    // childData.map(e => tagList.push(e.label));
-    // this.setState({ tag: tagList })
+    this.setState({ endDate: data })
   }
 
   // when component mounts, first thing it does is fetch all existing data in our db
@@ -143,7 +141,7 @@ export default class LogTask extends React.Component {
 
   // our put method that uses our backend api
   // to create new query into our data base
-  putTagDataToDB = (taskName, tag) => {
+  putTagDataToDB = (taskName, tag, startDate, endDate) => {
     let currentIds = this.state.data.map((data) => data.id);
     let idToBeAdded = 0;
     while (currentIds.includes(idToBeAdded)) {
@@ -153,6 +151,8 @@ export default class LogTask extends React.Component {
     axios.post('http://localhost:3001/api/putTaskData', {
       id: idToBeAdded,
       taskName: taskName,
+      startDate: startDate,
+      endDate: endDate,
       tag: tag,
     });
   };
@@ -222,7 +222,7 @@ export default class LogTask extends React.Component {
                 <TagAutoCompleteField parentCallback={this.callbackFunction} />
                 <MaterialUIPickers parentStartDateCallback={this.callbackStartDateFunction}  parentEndDateCallback={this.callbackEndDateFunction}/>
 
-                <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.taskName, this.state.tag)} className={useStyles.button}>
+                <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.taskName, this.state.tag,this.state.startDate,this.state.endDate)} className={useStyles.button}>
                   Add Task
                           </Button>
               </form>

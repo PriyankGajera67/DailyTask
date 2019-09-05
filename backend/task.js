@@ -8,7 +8,9 @@ const TagSchema = new Schema(
   {
     id: Number,
     taskName:String,
-    tag: Array
+    tag: Array,
+    startDate:Date,
+    endDate:Date
   },
   { timestamps: true }
 );
