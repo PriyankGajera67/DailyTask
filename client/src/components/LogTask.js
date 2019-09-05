@@ -172,6 +172,7 @@ export default class LogTask extends React.Component {
         <Container fixed>
           <Grid container spacing={3}>
             <Grid item xs={6}>
+            <h2>Log List</h2>
               <List component="nav" className={useStyles.list} aria-label="mailbox folders">
 
 
@@ -221,7 +222,7 @@ export default class LogTask extends React.Component {
 
             </Grid>
             <Grid item xs={6}>
-
+            <h2>Add New Log</h2>
               <form className={useStyles.root} noValidate>
                 <ValidationTextField
                   className={useStyles.margin}
