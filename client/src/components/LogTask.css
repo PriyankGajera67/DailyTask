@@ -8,3 +8,7 @@
     display: inline-block;
     margin-bottom: 10px; 
 }
+
+.MuiSvgIcon-root{
+    vertical-align: middle
+}

@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 import TimelineIcon from '@material-ui/icons/Timeline';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import Container from '@material-ui/core/Container';
 import TagAutoCompleteField from './TagAutoCompleteField';
 import MaterialUIPickers from './MaterialUIPickers';
@@ -180,14 +181,14 @@ export default class LogTask extends React.Component {
 
                   : data.map((dat) => (
                     <div className="task">
-                      <h4>{dat.taskName}</h4>
+                      <h4><AssignmentTurnedInIcon /> {dat.taskName}</h4>
 
-                      {/* <p>  {new Intl.DateTimeFormat('en-GB', {
+                      <p> Updated At : {new Intl.DateTimeFormat('en-GB', {
                         month: 'long',
                         day: '2-digit',
                         year: 'numeric',
                       }).format(new Date(dat.updatedAt))}
-                      </p> */}
+                      </p>
                       <p>
                       <TimelineIcon />&nbsp; &nbsp;
                       <span class="time-range">
