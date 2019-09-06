@@ -4,6 +4,7 @@ import Nav from './components/Nav';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import Tag from './components/Tag';
 import LogTask from './components/LogTask';
+import User from './components/User/User';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -35,6 +36,10 @@ class App extends Component {
 
   LogTask = () => {
     return <LogTask />;
+  }
+
+  User = () => {
+    return <User />;
   }
 
   constructor(props) {
@@ -133,7 +138,16 @@ class App extends Component {
                     <AddBoxIcon />
                   </ListItemIcon>
                   <ListItemText primary="Add Log" />
-                </ListItem>          </Link>
+                </ListItem>          
+              </Link>
+              <Link to="/users/">
+                <ListItem button>
+                  <ListItemIcon>
+                    <AddBoxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Users" />
+                </ListItem>         
+              </Link>
 
 
             </List>
@@ -143,6 +157,7 @@ class App extends Component {
         <Grid item xs={10}>
             <Route path="/tags" component={Tag} />
             <Route path="/logTask" component={LogTask} />
+            <Route path="/users" component={User} />
         </Grid>
       </Grid>
           
