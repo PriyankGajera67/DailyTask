@@ -122,7 +122,7 @@ export default class User extends React.Component {
     // our first get method that uses our backend api to
     // fetch data from our data base
     getDataFromDb = () => {
-        fetch('http://localhost:3001/api/getTagData')
+        fetch('http://localhost:3001/api/getUserData')
             .then((data) => data.json())
             .then((res) => this.setState({ data: res.data }));
     };
@@ -148,16 +148,22 @@ export default class User extends React.Component {
 
     // our put method that uses our backend api
     // to create new query into our data base
-    putTagDataToDB = (tag) => {
+    putTagDataToDB = (firstName,lastName,gender,dob,emailAddress,phoneNumber,password) => {
         let currentIds = this.state.data.map((data) => data.id);
         let idToBeAdded = 0;
         while (currentIds.includes(idToBeAdded)) {
             ++idToBeAdded;
         }
 
-        axios.post('http://localhost:3001/api/putTagData', {
+        axios.post('http://localhost:3001/api/putUserData', {
             id: idToBeAdded,
-            tag: tag,
+            firstName: firstName,
+            lastName:lastName,
+            gender:gender,
+            dob:dob,
+            emailAddress,emailAddress,
+            phoneNumber:phoneNumber,
+            password:password
         });
     };
 
@@ -177,8 +183,8 @@ export default class User extends React.Component {
 
                                 : data.map((dat) => (
                                     <div className="tag-chips" style={{ margin: 2 }}>
-                                        <Chip key={dat.tag}
-                                            label={dat.tag}
+                                        <Chip key={dat.firstName}
+                                            label={dat.firstName}
                                             color="primary"
                                             className={useStyles.chip}
                                         />
@@ -200,7 +206,7 @@ export default class User extends React.Component {
                                     variant="outlined"
                                     defaultValue=""
                                     id="validation-outlined-input"
-                                    onChange={(e) => this.setState({ tag: e.target.value })}
+                                    onChange={(e) => this.setState({ firstName: e.target.value })}
                                 />
                                 &nbsp;&nbsp;
                                 <ValidationTextField
@@ -210,7 +216,7 @@ export default class User extends React.Component {
                                     variant="outlined"
                                     defaultValue=""
                                     id="validation-outlined-input"
-                                    onChange={(e) => this.setState({ tag: e.target.value })}
+                                    onChange={(e) => this.setState({ lastName: e.target.value })}
                                 />
                                 <br></br>
                                 <br></br>
@@ -287,7 +293,15 @@ export default class User extends React.Component {
 
                                 <br />
                                 <br />
-                                <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(this.state.tag)} className={useStyles.button}>
+                                <Button variant="contained" color="primary" onClick={() => this.putTagDataToDB(
+                                    this.state.firstName,
+                                    this.state.lastName,
+                                    this.state.gender,
+                                    this.state.dob,
+                                    this.state.emailAddress,
+                                    this.state.phoneNumber,
+                                    this.state.password
+                                    )} className={useStyles.button}>
                                     Create User
                           </Button>
                             </form>

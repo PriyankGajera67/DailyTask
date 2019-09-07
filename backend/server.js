@@ -6,6 +6,7 @@ const logger = require('morgan');
 const Data = require('./data');
 const Tag = require('./tag');
 const Task = require('./task');
+const User = require('./user');
 
 const API_PORT = 3001;
 const app = express();
@@ -50,6 +51,13 @@ router.get('/getTagData', (req, res) => {
 
 router.get('/getTaskData', (req, res) => {
   Task.find((err, data) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+
+router.get('/getUserData', (req, res) => {
+  User.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
@@ -150,6 +158,32 @@ router.post('/putTaskData', (req, res) => {
   data.tag = tag;
   data.startDate = startDate;
   data.endDate = endDate;
+  data.id = id;
+  data.save((err) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
+
+router.post('/putUserData', (req, res) => {
+  let data = new User();
+
+  const { id, firstName, lastName, dob, gender,emailAddress,phoneNumber,password } = req.body;
+
+  if ((!id && id !== 0) || !firstName || !lastName || !dob || !gender || !emailAddress || !phoneNumber || !password) {
+    console.log("dfasdfasdfasdf");
+    return res.json({
+      success: false,
+      error: 'INVALID INPUTS',
+    });
+  }
+  data.firstName = firstName
+  data.lastName = lastName;
+  data.dob = dob;
+  data.gender = gender;
+  data.emailAddress = emailAddress;
+  data.phoneNumber = phoneNumber;
+  data.password = password;
   data.id = id;
   data.save((err) => {
     if (err) return res.json({ success: false, error: err });
