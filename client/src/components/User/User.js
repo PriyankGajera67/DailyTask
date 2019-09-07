@@ -8,6 +8,23 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+import { forwardRef } from 'react';
+
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
@@ -20,7 +37,7 @@ import {
     KeyboardTimePicker,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
-
+import MaterialTable from 'material-table';
 import axios from 'axios';
 
 
@@ -70,9 +87,29 @@ const ValidationTextField = withStyles({
     },
 })(TextField);
 
+const tableIcons = {
+    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+    Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
+    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+    Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+    SortArrow: forwardRef((props, ref) => <ArrowUpward {...props} ref={ref} />),
+    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
+  };
+
 export default class User extends React.Component {
     state = {
-        data: [],
+        //data: [],
         id: 0,
         firstName: null,
         lastName: null,
@@ -83,6 +120,16 @@ export default class User extends React.Component {
         dob: null,
         objectToUpdate: null,
         gender: "female",
+        columns: [
+            { title: 'Name', field: 'firstName' },
+            { title: 'Surname', field: 'lastName' },
+            { title: 'Birth Year', field: 'dob', type: 'numeric' },
+            {
+              title: 'Gender',
+              field: 'gender'
+            },
+        ],
+        data: [],
     };
 
     handleDelete = () => {
@@ -177,7 +224,7 @@ export default class User extends React.Component {
                         <Grid item xs={6}>
                             <h2> Users</h2>
                             {/* <Paper className={useStyles.paper}> */}
-                            {data.length <= 0
+                            {/* {data.length <= 0
 
                                 ? 'NO!! Users '
 
@@ -191,8 +238,44 @@ export default class User extends React.Component {
                                     </div>
 
 
-                                ))}
+                                ))} */}
                             {/* </Paper> */}
+
+                            <MaterialTable
+                            title="Users"
+                            icon={tableIcons}
+                            columns={this.state.columns}
+                            data={this.state.data}
+                            editable={{
+                                onRowAdd: newData =>
+                                new Promise(resolve => {
+                                    setTimeout(() => {
+                                    resolve();
+                                    const data = [...this.state.data];
+                                    data.push(newData);
+                                    this.setState({ ...this.state, data });
+                                    }, 600);
+                                }),
+                                // onRowUpdate: (newData, oldData) =>
+                                // new Promise(resolve => {
+                                //     setTimeout(() => {
+                                //     resolve();
+                                //     const data = [...this.state.data];
+                                //     data[data.indexOf(oldData)] = newData;
+                                //     this.setState({ ...this.state, data });
+                                //     }, 600);
+                                // }),
+                                // onRowDelete: oldData =>
+                                // new Promise(resolve => {
+                                //     setTimeout(() => {
+                                //     resolve();
+                                //     const data = [...this.state.data];
+                                //     data.splice(data.indexOf(oldData), 1);
+                                //     this.setState({ ...this.state, data });
+                                //     }, 600);
+                                // }),
+                            }}
+                            />
 
                         </Grid>
 
