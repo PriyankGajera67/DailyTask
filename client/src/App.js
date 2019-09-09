@@ -13,8 +13,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import Chart from 'react-apexcharts';
-import Container from '@material-ui/core/Container';
+import PeopleIcon from '@material-ui/icons/People';
+//import Chart from 'react-apexcharts';
+//import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 
 
@@ -143,7 +144,7 @@ class App extends Component {
               <Link to="/users/">
                 <ListItem button>
                   <ListItemIcon>
-                    <AddBoxIcon />
+                    <PeopleIcon  />
                   </ListItemIcon>
                   <ListItemText primary="Users" />
                 </ListItem>         
