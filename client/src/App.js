@@ -6,7 +6,7 @@ import Tag from './components/Tag';
 import LogTask from './components/LogTask';
 import User from './components/User/User';
 import Login from './components/Login/Login';
-import { BrowserRouter, Route,Switch, Link,Redirect } from "react-router-dom";
+import { BrowserRouter as Router,Route,Switch, Link,Redirect } from "react-router-dom";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -31,50 +31,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CheckAuth = () =>{
-  const token = localStorage.getItem('token');
-  const refreshToken = localStorage.getItem('refreshToken');
-
-  if(!token || !refreshToken){
-    return false;
-  }
-
-  try {
-
-    const { exp } = decode(refreshToken);
-
-    if(exp < new Date().getTime()){
-      return false;
-    } 
-
-  } catch (error) {
-    return false;
-  }
-
-  return true;
-
-}
-
-const AuthRoute = ({component :Component, ...rest}) =>(
- <Route {...rest} render={ props => (CheckAuth() ? (
-      <Component {...props} />
- ): ( <Redirect to={{ pathname:"login" }} /> ) 
- )} />
-);
 
 
 class App extends Component {
-  // Tag = () => {
-  //   return <Tag />;
-  // }
+  Tag = () => {
+    return <Tag />;
+  }
 
-  // LogTask = () => {
-  //   return <LogTask />;
-  // }
+  LogTask = () => {
+    return <LogTask />;
+  }
 
-  // User = () => {
-  //   return <User />;
-  // }
+  User = () => {
+    return <User />;
+  }
 
   constructor(props) {
     super(props);
@@ -97,6 +67,7 @@ class App extends Component {
       data: []
     }
   }
+  
 
 
   // when component mounts, first thing it does is fetch all existing data in our db
@@ -153,7 +124,7 @@ class App extends Component {
       <div>
         <Nav />
         <br />
-        {/* <Router>
+        <Router>
         <Grid container spacing={3}>
         <Grid item xs={2}>
         <div>
@@ -195,25 +166,24 @@ class App extends Component {
         </Grid>
       </Grid>
           
-        </Router> */}
+        </Router>
         {/* <Container maxWidth="sm">
           <Chart options={this.state.options} series={this.state.series} type="line" width={600} />
         </Container> */}
 
-        <BrowserRouter>
+        {/* <BrowserRouter>
           <Switch>
             <Route exact path="login" render={props => <Login {...props}/>}></Route>
             <Route exact path="logtask" render={props => <LogTask {...props}/>}></Route>
             <Route exact path="tags" render={props => <Tag {...props}/>}></Route>
             <Route exact path="users" render={props => <User {...props}/>}></Route>
-            <AuthRoute exact path="auth" component={Auth} />
+            <AuthRoute exact path="logtask" component={LogTask} />
           </Switch>
-        </BrowserRouter>
+        </BrowserRouter> */}
 
 
       </div>
     );
   }
 }
-
 export default App;
